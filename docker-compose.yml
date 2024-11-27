@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./
+    command: ./auth-service
+    ports:
+      - 8080:8080
+    environment:
+      JWT_KEY: my_key_123
+    depends_on:
+      - db
+
+  db:
+    restart: always
+    image: postgres:latest
+    volumes:
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - 5432:5432
+
+    
